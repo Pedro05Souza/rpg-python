@@ -1,11 +1,13 @@
 
 class Entity():
     
-    def __init__(self, level: int = 1):
+    def __init__(self, name: str, level: int = 1):
         if level < 0:
             raise TypeError('Level must be amove 0')
         
+        self.name = name
         self.health = 1
+        self.max_health = 1
         self.damage = 1
         self.defense = 1
         self.level = level
@@ -15,13 +17,14 @@ class Entity():
     def __str__(self):
         return f'character with {self.health} hp, with {self.damage} damage and {self.defense}'
     
-    def attack(self, attack_description: str, other) -> None: 
-        other.health -= max(0, self.damage - other.defense)
-        print(attack_description)
+    def attack(self, other) -> str:
+        damage_dealt = self.damage - other.defense
+        other.health -= max(0, damage_dealt)
+        return f"{self.name} attacked {other.name}, dealing {damage_dealt} of damage."
 
     def scalability(self):
-        print(self.level)
         self.health = self.level * 100
+        self.max_health = self.health
         self.damage = self.level * 5
         self.defense = self.level * 2
 
@@ -64,3 +67,11 @@ class Entity():
     @xp.setter
     def xp(self, value):
         self.__xp = value
+        
+    @property
+    def name(self):
+        return self.__name
+    
+    @name.setter
+    def name(self, value):
+        self.__name = value
