@@ -8,6 +8,7 @@ class Enemy(Entity):
     def __init__(self, enemy_name: str, enemy_level: int, drop_items: list = []):
         super().__init__(enemy_name, enemy_level)
         self.drop_items = drop_items
+        self.xp = enemy_level * 100 // 2
         self.scalability()
 
     def on_enemy_death(self, character: Character):
