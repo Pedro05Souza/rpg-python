@@ -7,6 +7,7 @@ class Character(Entity):
     def __init__(self, level: int = 1, inventory: list = []):
         super().__init__(level)
         self.inventory = inventory
+        self.xp = 0
 
     def level_up(self):
         if self.xp >= self.level * 100:
@@ -45,27 +46,43 @@ class Character(Entity):
 
         print(f"Item {item.name} equipado.")
 
-    def unequip_item(self, index: int) -> str:
+    def unequip_item(self, index: int) -> None:
         if index < 0 or index > len(self.inventory) - 1:
             print("Posição inválida.")
         
         item = self.inventory[index]
 
         if not item.is_equiped:
-            return print(f"Item {item.name} não está equipado.")
+            print(f"Item {item.name} não está equipado.")
+            return
         
         self.health -= item.health_boost
         self.damage -= item.damage_boost
         self.defense -= item.defense_boost
-        return print(f"Item {item.name} desequipado.")
+        print(f"Item {item.name} desequipado.")
     
     def retrieve_character_status(self) -> None:
         print(
-            "Status do personagem:" +
-            f"Nome: {self.name}" +
-            f"Nível: {self.level}" +
-            f"Vida: {self.health}" +
-            f"Dano: {self.damage}" +
-            f"Defesa: {self.defense}" +
+            "--- Status do personagem --- \n" +
+            f"Nome: {self.name}\n" +
+            f"Nível: {self.level}\n" +
+            f"Vida: {self.health} / {self.max_health}\n" +
+            f"Dano: {self.damage}\n" +
+            f"Defesa: {self.defense}\n" +
             f"XP: {self.xp} / {self.level * 100}"
             )
+        
+    def display_inventory(self) -> None:
+        if not self.inventory:
+            print("Inventário vazio.")
+            return
+        
+        for item in self.inventory:
+            print(
+                "------------------\n" +
+                f"Nome: {item.name}" +
+                f"Dano: {item.damage_boost}" +
+                f"Defesa: {item.defense_boost}" +
+                f"Vida: {item.health_boost}"
+                "------------------\n"
+                )
