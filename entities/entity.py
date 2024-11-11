@@ -1,32 +1,41 @@
+from math import sqrt
+from random import random
 
 class Entity():
     
     def __init__(self, name: str, level: int = 1):
-        if level < 0:
-            raise TypeError('Level must be amove 0')
+        if level <= 0:
+            raise TypeError('Nível não pode ser negativo ou zero.')
         
         self.name = name
-        self.health = 1
-        self.max_health = 1
-        self.damage = 1
-        self.defense = 1
         self.level = level
-        self.xp = 0
         self.scalability()
 
     def __str__(self):
-        return f'character with {self.health} hp, with {self.damage} damage and {self.defense}'
+        return f'Entidade com {self.health} de vida, com {self.damage} de dano e {self.defense} de defesa.\n'
     
     def attack(self, other) -> str:
         damage_dealt = self.damage - other.defense
         other.health -= max(0, damage_dealt)
-        return f"{self.name} attacked {other.name}, dealing {damage_dealt} of damage."
+        rng_crit = random()
 
-    def scalability(self):
-        self.health = self.level * 100
+        if rng_crit <= self.crit_chance:
+            damage_dealt *= 2
+            other.health -= max(0, damage_dealt)
+            return f"{self.name} atacou {other.name}, causando {damage_dealt} de dano. Vida restante de {other.name}: {other.health} / {other.max_health}. Foi um golpe crítico!\n"
+
+        return f"{self.name} atacou {other.name}, causando {damage_dealt} de dano. Vida restante de {other.name}: {other.health} / {other.max_health}.\n"
+
+    def scalability(self) -> None:
+        self.health = self.level * 50
         self.max_health = self.health
-        self.damage = self.level * 5
+        self.damage = self.level * 10
         self.defense = self.level * 2
+        self.crit_chance = round((sqrt(self.level * 100) / 100), 2)
+
+
+    def heal(self) -> None:
+        self.health = self.max_health
 
     @property
     def health(self):
@@ -75,3 +84,11 @@ class Entity():
     @name.setter
     def name(self, value):
         self.__name = value
+
+    @property
+    def crit_chance(self):
+        return self.__crit_chance
+    
+    @crit_chance.setter
+    def crit_chance(self, value):
+        self.__crit_chance = value
