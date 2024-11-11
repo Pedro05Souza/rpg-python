@@ -1,14 +1,15 @@
+from math import ceil
 from entities import Character, Enemy
 from item import Item
 from name_generator import name_generator
 from random import randint
+from utils import clear_terminal
 
 def event_loop(character: Character) -> None:
 
   while character.health > 0:
-
     menu()
-    user_input = int(input("Insira a escolha desejada:"))
+    user_input = int(input("Insira a escolha desejada:\n"))
 
     match user_input:
 
@@ -20,36 +21,32 @@ def event_loop(character: Character) -> None:
         character.retrieve_character_status()
 
       case 3:
-        print(character.inventory)
-
+        character.display_inventory()
       case 4:
-        print("Saindo do jogo...")
+        print("Saindo do jogo...\n")
         break
 
       case _:
-        print("Opção inválida.")
+        print("Opção inválida.\n")
   
 def menu() -> None:
   print(
       "--- Menu ---\n" +
     "[1]. Atacar Inimigos\n" +
-    "[2] Ver Atributos\n" +
+    "[2]. Ver Atributos\n" +
     "[3]. Ver Inventário\n" +
     "[4]. Sair\n"
     )
 
 def enemy_creator(player_level: int) -> Enemy:
-  min_range = max(1, player_level // 1.5)
-  max_range = int(player_level * 2)
-  enemy_level = randint(min_range, max_range)
-
+  enemy_level = randint(ceil(player_level / 1.5), player_level)
   enemy_name = name_generator()
   enemy_drops = randint(0, 3)
   created_items = [item_creator(enemy_level) for _ in range(enemy_drops)]
   return Enemy(enemy_name, enemy_level, created_items)
 
 def character_creator() -> Character:
-  character_name = input("Insira o nome do personagem:")
+  character_name = input("Insira o nome do personagem:\n")
   return Character(character_name)
 
 def item_creator(character_level: int) -> Item:
@@ -64,13 +61,15 @@ def item_creator(character_level: int) -> Item:
 
 def combat(c: Character, e: Enemy) -> None:
 
+  print(f"Você encontrou um {e.name} de nível {e.level}!\n")
+
   while c.health > 0 and e.health > 0:
     print(
       "\n--- Menu de Batalha ---\n" +
       "[1]. Atacar\n" +
       "[2]. Fugir\n"
       )
-    user_input = int(input("Insira a escolha desejada:"))
+    user_input = int(input("Insira a escolha desejada:\n"))
 
     match user_input:
 
@@ -81,11 +80,50 @@ def combat(c: Character, e: Enemy) -> None:
       case 2:
         runaway_chance = randint(0, 3)
         if runaway_chance == 0:
-          print("Você fugiu com sucesso!")
+          print("Você fugiu com sucesso!\n")
+          c.heal()
           break
         else:
-          print("Você não conseguiu fugir!")
+          print("Você não conseguiu fugir!\n")
           print(e.attack(c))
 
       case _:
-        print("Opção inválida.")
+        print("Opção inválida.\n")
+
+    if c.health <= 0 or e.health <= 0: 
+      death_handler(c, e)
+
+def death_handler(c: Character, e: Enemy) -> None:
+  if c.health <= 0:
+    print("Você morreu!\n")
+    print(f"Você foi morto por {e.name} de nível {e.level}.\n")
+    return
+
+  print(f"Você derrotou {e.name} de nível {e.level}!\n")
+  e.on_enemy_death(c)
+  item_dropped = e.enemy_drop()
+
+  if not item_dropped:
+    return
+  
+  print(f"{e.name} deixou cair um item: {item_dropped.name}.\n")
+  print(
+    "[1]. Pegar item\n" +
+    "[2]. Deixar item\n"
+    )
+  user_input = int(input("Insira a escolha desejada:\n"))
+
+  match user_input:
+  
+      case 1:
+        c.inventory.append(item_dropped)
+        print(f"{item_dropped.name} foi adicionado ao seu inventário!\n")
+
+      case 2:
+        print(f"{item_dropped.name} foi deixado para trás.\n")
+
+      case _:
+        print("Opção inválida.\n")
+  
+  c.heal()
+  clear_terminal()
