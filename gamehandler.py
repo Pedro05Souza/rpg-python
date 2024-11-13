@@ -102,8 +102,7 @@ def death_handler(c: Character, e: Enemy) -> None:
     return
 
   print(f"Você derrotou {e.name} de nível {e.level}!\n")
-  e.on_enemy_death(c)
-  item_dropped = e.enemy_drop()
+  item_dropped = e.on_enemy_death(c)
 
   if not item_dropped:
     return

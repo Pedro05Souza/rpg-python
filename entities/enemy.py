@@ -10,11 +10,12 @@ class Enemy(Entity):
         self.drop_items = drop_items
         self.xp = enemy_level * 100 // 2
 
-    def on_enemy_death(self, character: Character):
+    def on_enemy_death(self, character: Character) -> Item:
         character.xp += self.xp
         character.level_up()
+        return self.__enemy_drop()
 
-    def enemy_drop(self) -> Item:
+    def __enemy_drop(self) -> Item:
         drop_chance = random()
         
         if drop_chance <= .3 or not self.drop_items:
