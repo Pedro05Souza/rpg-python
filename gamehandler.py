@@ -21,7 +21,8 @@ def event_loop(character: Character) -> None:
         character.retrieve_character_status()
 
       case 3:
-        character.display_inventory()
+        character.inventory_handler()
+
       case 4:
         print("Saindo do jogo...\n")
         break
@@ -43,7 +44,9 @@ def enemy_creator(player_level: int) -> Enemy:
   enemy_name = name_generator()
   enemy_drops = randint(0, 3)
   created_items = [item_creator(enemy_level) for _ in range(enemy_drops)]
-  return Enemy(enemy_name, enemy_level, created_items)
+  e = Enemy(enemy_name, enemy_level, created_items)
+  e.scalability(30, 15, 5)
+  return e
 
 def character_creator() -> Character:
   character_name = input("Insira o nome do personagem:\n")
