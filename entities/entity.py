@@ -6,10 +6,9 @@ class Entity():
     def __init__(self, name: str, level: int = 1):
         if level <= 0:
             raise TypeError('Nível não pode ser negativo ou zero.')
-        
+
         self.name = name
         self.level = level
-        self.scalability()
 
     def __str__(self):
         return f'Entidade com {self.health} de vida, com {self.damage} de dano e {self.defense} de defesa.\n'
@@ -26,13 +25,17 @@ class Entity():
 
         return f"{self.name} atacou {other.name}, causando {damage_dealt} de dano. Vida restante de {other.name}: {other.health} / {other.max_health}.\n"
 
-    def scalability(self) -> None:
-        self.health = self.level * 50
+    def scalability(
+            self, 
+            health_multiplier: int,
+            damage_multipler: int,
+            defense_multiplier: int
+            ) -> None:
+        self.health = self.level * health_multiplier
         self.max_health = self.health
-        self.damage = self.level * 10
-        self.defense = self.level * 2
+        self.damage = self.level * damage_multipler
+        self.defense = self.level * defense_multiplier
         self.crit_chance = round((sqrt(self.level * 100) / 100), 2)
-
 
     def heal(self) -> None:
         self.health = self.max_health
