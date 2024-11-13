@@ -1,9 +1,8 @@
 from math import ceil
 from entities import Character, Enemy
 from item import Item
-from name_generator import name_generator
 from random import randint
-from utils import clear_terminal
+from utils import clear_terminal, name_generator
 
 def event_loop(character: Character) -> None:
 
