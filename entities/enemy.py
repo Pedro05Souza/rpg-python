@@ -17,7 +17,7 @@ class Enemy(Entity):
     def enemy_drop(self) -> Item:
         drop_chance = random()
         
-        if drop_chance <= .3:
+        if drop_chance <= .3 or not self.drop_items:
             return None
         
         return choice(self.drop_items)
