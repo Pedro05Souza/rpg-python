@@ -33,7 +33,7 @@ class Character(Entity):
         self.inventory.remove(item)
         print(f"Item {item.name} removido do inventário.")
     
-    def equip_item(self, item: Item) -> str:
+    def __equip_item(self, item: Item) -> str:
         current_equips = [item for item in self.inventory if item.is_equiped]
         current_equips = len(current_equips)
 
@@ -46,7 +46,7 @@ class Character(Entity):
 
         print(f"Item {item.name} equipado.")
 
-    def unequip_item(self, index: int) -> None:
+    def __unequip_item(self, index: int) -> None:
         if index < 0 or index > len(self.inventory) - 1:
             print("Posição inválida.")
         
@@ -72,17 +72,47 @@ class Character(Entity):
             f"XP: {self.xp} / {self.level * 100}"
             )
         
-    def display_inventory(self) -> None:
+    def __display_inventory(self) -> None:
+        for index, item in enumerate(self.inventory):
+            print(
+                "------------------\n" +
+                f"Posição: {index + 1}\n" +
+                f"Nome: {item.name}\n" +
+                f"Dano: {item.damage_boost}\n" +
+                f"Defesa: {item.defense_boost}\n" +
+                f"Vida: {item.health_boost}\n"
+                "------------------\n"
+                )
+            
+    def inventory_handler(self) -> None:
+
         if not self.inventory:
             print("Inventário vazio.")
             return
         
-        for item in self.inventory:
-            print(
-                "------------------\n" +
-                f"Nome: {item.name}" +
-                f"Dano: {item.damage_boost}" +
-                f"Defesa: {item.defense_boost}" +
-                f"Vida: {item.health_boost}"
-                "------------------\n"
-                )
+        self.__display_inventory()
+        print("O que deseja fazer?\n")
+        print("[1]. Equipar item\n")
+        print("[2]. Desequipar item\n")
+        print("[3]. Sair\n")
+        user_input = 0
+        while user_input != 3:
+            user_input = int(input())
+
+            if not self.__index_validator(int(input("Posição do item: ")) - 1):
+                continue
+
+            if user_input == 1:
+                self.__equip_item(self.inventory[int(input("Posição do item: ") - 1)])
+            elif user_input == 2:
+                self.__unequip_item(int(input("Posição do item: ") - 1))
+            elif user_input == 3:
+                break
+            else:
+                print("Opção inválida.")
+
+    def __index_validator(self, index: int):
+        if index < 0 or index > len(self.inventory) - 1:
+            print("Posição inválida.")
+            return False
+        return True
