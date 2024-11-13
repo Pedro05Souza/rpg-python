@@ -99,15 +99,18 @@ class Character(Entity):
         while user_input != 3:
             user_input = int(input())
 
-            if not self.__index_validator(int(input("Posição do item: ")) - 1):
-                continue
+            if user_input == 3:
+                break
 
+            item_position = int(input("Posição do item: ")) - 1
+
+            if not self.__index_validator(item_position):
+                continue
+            
             if user_input == 1:
-                self.__equip_item(self.inventory[int(input("Posição do item: ") - 1)])
+                self.__equip_item(self.inventory[item_position])
             elif user_input == 2:
                 self.__unequip_item(int(input("Posição do item: ") - 1))
-            elif user_input == 3:
-                break
             else:
                 print("Opção inválida.")
 
