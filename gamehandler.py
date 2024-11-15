@@ -2,13 +2,13 @@ from math import ceil
 from entities import Character, Enemy
 from item import Item
 from random import randint
-from utils import clear_terminal, name_generator
+from utils import clear_terminal, name_generator, input_validator
 
 def event_loop(character: Character) -> None:
 
   while character.health > 0:
     menu()
-    user_input = int(input("Insira a escolha desejada:\n"))
+    user_input = input_validator(int, "Insira a escolha desejada:\n")
 
     match user_input:
 
@@ -48,7 +48,7 @@ def enemy_creator(player_level: int) -> Enemy:
   return e
 
 def character_creator() -> Character:
-  character_name = input("Insira o nome do personagem:\n")
+  character_name = input_validator(str, "Insira o nome do seu personagem:\n")
   return Character(character_name)
 
 def item_creator(character_level: int) -> Item:
@@ -71,7 +71,7 @@ def combat(c: Character, e: Enemy) -> None:
       "[1]. Atacar\n" +
       "[2]. Fugir\n"
       )
-    user_input = int(input("Insira a escolha desejada:\n"))
+    user_input = input_validator(int, "Insira a escolha desejada:\n")
 
     match user_input:
 
@@ -103,6 +103,7 @@ def death_handler(c: Character, e: Enemy) -> None:
 
   print(f"Você derrotou {e.name} de nível {e.level}!\n")
   item_dropped = e.on_enemy_death(c)
+  c.heal()
 
   if not item_dropped:
     return
@@ -112,7 +113,7 @@ def death_handler(c: Character, e: Enemy) -> None:
     "[1]. Pegar item\n" +
     "[2]. Deixar item\n"
     )
-  user_input = int(input("Insira a escolha desejada:\n"))
+  user_input = input_validator(int, "Insira a escolha desejada:\n")
 
   match user_input:
   
@@ -125,6 +126,5 @@ def death_handler(c: Character, e: Enemy) -> None:
 
       case _:
         print("Opção inválida.\n")
-  
-  c.heal()
+
   clear_terminal()
