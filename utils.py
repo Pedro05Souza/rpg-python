@@ -30,3 +30,11 @@ def name_generator() -> str:
             name += choice(alphabet)
 
     return name.capitalize()
+
+def input_validator(type_: type, message: str) -> type:
+    while True:
+        try:
+            user_input = type_(input(message))
+            return user_input
+        except ValueError:
+            print("Entrada inválida. Tente novamente.")
