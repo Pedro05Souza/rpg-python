@@ -1,4 +1,5 @@
 from entities.entity import Entity
+from utils import input_validator
 from item import Item
 from constants import MAX_INVENTORY_SLOTS, MAX_EQUIPS
 
@@ -28,19 +29,21 @@ class Character(Entity):
     def remove_item(self, index: int) -> None:
         if index < 0 or index > len(self.inventory) - 1:
             print("Posição inválida.")
+            return
         
         item = self.inventory[index]
         self.inventory.remove(item)
         print(f"Item {item.name} removido do inventário.")
     
-    def __equip_item(self, item: Item) -> str:
+    def __equip_item(self, item: Item) -> None:
         current_equips = [item for item in self.inventory if item.is_equiped]
         current_equips = len(current_equips)
 
         if current_equips == MAX_EQUIPS:
-            return print(f"Você não pode equipar mais de {MAX_EQUIPS} itens.")
+            print(f"Você não pode equipar mais de {MAX_EQUIPS} itens.")
+            return
 
-        self.health += item.health_boost
+        self.max_health += item.health_boost
         self.damage += item.damage_boost
         self.defense += item.defense_boost
 
@@ -56,7 +59,7 @@ class Character(Entity):
             print(f"Item {item.name} não está equipado.")
             return
         
-        self.health -= item.health_boost
+        self.max_health -= item.health_boost
         self.damage -= item.damage_boost
         self.defense -= item.defense_boost
         print(f"Item {item.name} desequipado.")
@@ -81,6 +84,7 @@ class Character(Entity):
                 f"Dano: {item.damage_boost}\n" +
                 f"Defesa: {item.defense_boost}\n" +
                 f"Vida: {item.health_boost}\n"
+                f"Equipado: {'Sim' if item.is_equiped else 'Não'}\n" +
                 "------------------\n"
                 )
             
@@ -89,20 +93,21 @@ class Character(Entity):
         if not self.inventory:
             print("Inventário vazio.")
             return
-        
-        self.__display_inventory()
-        print("O que deseja fazer?\n")
-        print("[1]. Equipar item\n")
-        print("[2]. Desequipar item\n")
-        print("[3]. Sair\n")
         user_input = 0
+        
         while user_input != 3:
+            self.__display_inventory()
+            print("O que deseja fazer?\n")
+            print("[1]. Equipar item\n")
+            print("[2]. Desequipar item\n")
+            print("[3]. Sair\n")
+
             user_input = int(input())
 
             if user_input == 3:
                 break
 
-            item_position = int(input("Posição do item: ")) - 1
+            item_position = input_validator(int, "Insira a posição do item: ") - 1
 
             if not self.__index_validator(item_position):
                 continue
@@ -110,7 +115,7 @@ class Character(Entity):
             if user_input == 1:
                 self.__equip_item(self.inventory[item_position])
             elif user_input == 2:
-                self.__unequip_item(int(input("Posição do item: ") - 1))
+                self.__unequip_item(self.inventory[item_position])
             else:
                 print("Opção inválida.")
 
