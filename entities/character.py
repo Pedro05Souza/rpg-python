@@ -115,7 +115,7 @@ class Character(Entity):
             if user_input == 1:
                 self.__equip_item(self.inventory[item_position])
             elif user_input == 2:
-                self.__unequip_item(self.inventory[item_position])
+                self.__unequip_item(item_position)
             else:
                 print("Opção inválida.")
 
