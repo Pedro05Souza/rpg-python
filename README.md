@@ -14,7 +14,7 @@
 
 After runnning it sucessfully, run the following command to activate the terminal:
 
-Windows:
+### Windows:
 
   ```bash
   venv/Scripts/activate
@@ -25,7 +25,7 @@ If you encounter a permission policy issue, enter the following command:
  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 
  ```
 
-Unix Systems:
+### Unix Systems:
   ```bash
 source venv/bin/activate
  ```
