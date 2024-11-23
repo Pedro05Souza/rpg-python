@@ -6,9 +6,6 @@ from copy import deepcopy
 
 @pytest.fixture
 def character() -> Character:
-    """
-    Cria um personagem com status iniciais.
-    """
     character = Character(level=1)
     character.max_health = character.level * 2
     character.damage = character.level * 2
