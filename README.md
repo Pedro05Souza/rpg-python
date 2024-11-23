@@ -48,7 +48,7 @@ python main.py
 To verify the functionality of the game, run the tests using PyTest:
 
   ```bash
-pytest
+python -m pytest
  ```
 This will execute all tests in the `tests/` directory and display the results.
 
