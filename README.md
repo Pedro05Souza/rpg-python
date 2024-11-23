@@ -20,6 +20,11 @@ Windows:
   venv/Scripts/activate
  ```
 
+If you encounter a permission policy issue, enter the following command:
+  ```bash
+ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 
+ ```
+
 Unix Systems:
   ```bash
 source venv/bin/activate
