@@ -1,4 +1,4 @@
-### A python built rpg game with test coverage.
+# A python built rpg game with test coverage.
 
 
 ## Project Dependancies
