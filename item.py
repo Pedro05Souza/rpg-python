@@ -1,4 +1,4 @@
-class Item():
+class Item:
 
     def __init__(self, name, damage_boost=0, defense_boost=0, health_boost=0):
         self.name = name

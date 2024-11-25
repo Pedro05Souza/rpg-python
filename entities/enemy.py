@@ -3,6 +3,7 @@ from entities.character import Character
 from item import Item
 from random import random, choice
 
+
 class Enemy(Entity):
 
     def __init__(self, enemy_name: str, enemy_level: int, drop_items: list = []):
@@ -17,8 +18,8 @@ class Enemy(Entity):
 
     def __enemy_drop(self) -> Item:
         drop_chance = random()
-        
-        if drop_chance <= .3 or not self.drop_items:
+
+        if drop_chance <= 0.3 or not self.drop_items:
             return None
-        
+
         return choice(self.drop_items)

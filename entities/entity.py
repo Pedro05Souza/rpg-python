@@ -1,19 +1,24 @@
 from math import sqrt
 from random import random
 
-class Entity():
-    
-    def __init__(self, name: str, level: int = 1):
+
+class Entity:
+
+    def __init__(self, name: str, level: int = 1) -> None:
         if level <= 0:
-            raise TypeError('Nível não pode ser negativo ou zero.')
+            raise TypeError("Nível não pode ser negativo ou zero.")
 
         self.name = name
         self.level = level
 
-    def __str__(self):
-        return f'Entidade com {self.health} de vida, com {self.damage} de dano e {self.defense} de defesa.\n'
-    
-    def attack(self, other) -> str:
+    def __str__(self) -> str:
+        return f"Entidade com {self.health} de vida, com {self.damage} de dano e {self.defense} de defesa.\n"
+
+    def attack(self, other: "Entity") -> str:
+
+        if not isinstance(other, Entity):
+            raise TypeError("A entidade passada não é válida.")
+
         damage_dealt = self.damage - other.defense
         other.health -= max(0, damage_dealt)
         rng_crit = random()
@@ -23,14 +28,13 @@ class Entity():
             other.health -= max(0, damage_dealt)
             return f"{self.name} atacou {other.name}, causando {damage_dealt} de dano. Vida restante de {other.name}: {other.health} / {other.max_health}. Foi um golpe crítico!\n"
 
+        other.health -= max(0, damage_dealt)
+
         return f"{self.name} atacou {other.name}, causando {damage_dealt} de dano. Vida restante de {other.name}: {other.health} / {other.max_health}.\n"
 
     def scalability(
-            self, 
-            health_multiplier: int,
-            damage_multipler: int,
-            defense_multiplier: int
-            ) -> None:
+        self, health_multiplier: int, damage_multipler: int, defense_multiplier: int
+    ) -> None:
         self.health = self.level * health_multiplier
         self.max_health = self.health
         self.damage = self.level * damage_multipler
@@ -41,15 +45,15 @@ class Entity():
         self.health = self.max_health
 
     @property
-    def health(self):
+    def health(self) -> int:
         return self.__health
 
     @property
-    def damage(self):
+    def damage(self) -> int:
         return self.__damage
 
     @property
-    def defense(self):
+    def defense(self) -> int:
         return self.__defense
 
     @health.setter
@@ -67,7 +71,7 @@ class Entity():
     @property
     def level(self):
         return self.__level
-    
+
     @level.setter
     def level(self, value):
         self.__level = value
@@ -75,15 +79,15 @@ class Entity():
     @property
     def xp(self):
         return self.__xp
-    
+
     @xp.setter
     def xp(self, value):
         self.__xp = value
-        
+
     @property
     def name(self):
         return self.__name
-    
+
     @name.setter
     def name(self, value):
         self.__name = value
@@ -91,7 +95,7 @@ class Entity():
     @property
     def crit_chance(self):
         return self.__crit_chance
-    
+
     @crit_chance.setter
     def crit_chance(self, value):
         self.__crit_chance = value
